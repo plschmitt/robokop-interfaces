@@ -1,93 +1,101 @@
-# Rosetta
+### Rosetta Introduction
 
-Rosetta is the knowledge map and service invocation tier of the Gamma reasoner.
+- Rosetta is the knowledge map and service invocation tier of the Gamma Reasoner.
 
-Rosetta coordinates semantically annotated data sources into a metadata graph. That graph can be queried to generate programs to perform complex data retrieval tasks. It looks like this:
+- Rosetta coordinates semantically annotated data sources into a metadata graph. That graph can be queried to generate programs to perform complex data retrieval tasks. It looks like this:
+
 ![rosetta](https://github.com/NCATS-Gamma/robokop-interfaces/blob/master/rosetta.png)
 
 Blue nodes are semantic types from the [biolink-model](https://biolink.github.io/biolink-model/)
 
-### Installation
 
-### System Preparation (macOS)
+### General Installation
 
-(optional) Install Homebrew 'the missing package manager for macOS': 
+# System Preparation (macOS)
+
+- (optional, macOS, recommended) Install Homebrew 'the missing package manager for macOS': 
 ```
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-neo4j requires a running JVM, version >= 1.8:
+- Neo4J requires a running JVM, version >= 1.8:
 ```
 $ brew cask install java
 ```
-then, since Neo4J startup script will look for 'JAVA_HOME', so set the 'JAVA_HOME' variable in your '.bash_profile' file with:
+
+- Neo4J startup script will look for 'JAVA_HOME', so set the 'JAVA_HOME' variable in your '.bash_profile' file with:
 ```
-$ export JAVA_HOME=$(/usr/libexec/java_home)
+$ echo export "JAVA_HOME=$(/usr/libexec/java_home)" >> ~/.bash_profile
 ```
 
-Rosetta dependencies will also require the 'postgresql' package:
+- Rosetta dependencies will also require the 'postgresql' package:
 ```
 $ brew install postgresql
 ```
 
-### Graph Database
-[Download](https://neo4j.com/download/), install, and start Neo4J Enterprise >= 3.2.6. (Requires JVM >= 1.8, install)
+# Neo4J (Graph Database) Setup
+
+- [Download](https://neo4j.com/download/) and install Neo4J Enterprise >= 3.2.6
+
+- Start Neo4J locally:
 ```
 $ <neo4j-install-dir>/bin/neo4j start
 ```
-### Cache
-[Download](http://download.redis.io/releases/redis-4.0.8.tar.gz), install, and start Redis 4.0.10
 
-using Homebrew on macOS:
+# Redis (Cache) Setup
+using Homebrew...
 ```
 '$brew install redis'
 ```
-OR download and then install manually: 
+OR download (http://download.redis.io/releases) and then install manually: 
 ```
 <redis-install-dir>/src/redis-server
 ```
+
 - to start redis and set it so that it will run at login: 
 ```
 $brew services start redis'
 ```
+
 - check to see if redis server is running: 
 ```
 $redis-cli ping'
 ```
 --> response = 'PONG' if working
 
-### Rosetta Preparation
-Clone the repository.
+# Rosetta Preparation
+- Clone the repository:
 ```
 $ git clone <repo>
-$ cd repo/
+$ cd <repo>
 $ pip install -r rosetta_requirements.txt
   ```
   NOTE, if you receive this message: "Command "python setup.py egg_info" failed with error code 1 in /private/var/...  then do the following:
-  
-  ```
+   ```
   $ brew install postgresql
   ```
   then re-try: 
-  
-  $ pip install -r requirements.txt'
+  ```
+  $ pip install -r rosetta_requirements.txt'
+  ```
 
-### Initialize Rosetta
+# Initialize Rosetta
 
-Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined services. It configures all of these according to the biolink-model.
+- Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined      services. It configures all of these according to the biolink-model.
 ```
-$ PYTHONPATH=$PWD python rosetta.py --delete-type-graph --initialize-type-graph --debug
+$ PYTHONPATH=$PWD python greent/rosetta.py --delete-type-graph --initialize-type-graph --debug
 ```
 
-Via the Neo4J interface at http://localhost:7474/browser/ query the entire type graph:
-
+- Via the Neo4J interface at http://localhost:7474/browser/ query the entire type graph:
 ```
 match (m)--(n) return *
 ```
+
 Query a particular path:
 ```
 MATCH (n:named_thing)-[a]->(d:disease)-[b]->(g:gene) RETURN *
 ```
+
 In the returned graph, nodes are biolink-model concepts and edges contain attributes indicating the service to invoke. 
 
 ## Web API

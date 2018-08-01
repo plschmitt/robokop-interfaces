@@ -1,0 +1,132 @@
+
+#########################################################################
+##
+##  Define concepts and operators
+##    * Concepts are connected to a list of instance types.
+##    * Link semantics augment the Translator Registry
+##    * Transitions between types with semantics are defined by curie.
+##
+#########################################################################
+
+# Rosetta will build a concept/type graph is based on these mappings.
+# The order of these lists determines the preference for making the node identifier.
+
+'@concepts' :
+
+  anatomical_entity  : [ 'UBERON' ]
+  biological_process : [ 'GO.BIOLOGICAL_PROCESS' ]
+  cell               : [ 'CL' ]
+  cellular_component : [ 'GO.CELLULAR_COMPONENT' ]
+  disease            : [ 'MONDO', 'DOID', 'PHAROS.DISEASE', 'OMIM', 'MESH.DISEASE', 'ORPHANET' , 'EFO', 'UMLS']
+  gene               : [ 'HGNC', 'NCBIGENE', 'HGNC.SYMBOL', 'ENTREZ',  'ENSEMBL', 'ENSEMBL.TRANSCRIPT', 'UNIPROTKB' , 'UNIPROT', 'MGI', 'ZFIN']
+  genetic_condition  : [ 'MONDO', 'DOID', 'OMIM', 'UMLS', 'EFO']
+  molecular_function : [ 'GO.MOLECULAR_FUNCTION' ]
+  Name               : [ 'NAME.DRUG', 'NAME.DISEASE', 'NAME.SYMPTOM', 'NAME.ANATOMY', 'DISEASE_NAME', 'MESH.NAME', 'NAME.PHENOTYPE' ]
+  pathway            : [ 'KEGG', 'REACTOME', 'PHARMGKB.PATHWAYS', 'WIKIPATHWAYS', 'BIOCARTA.PATHWAY', 'KEGG.PATHWAY', 'REACT', 'KEGG-path' ]
+  phenotypic_feature : [ 'HP' , 'NCIT']
+  chemical_substance : [ 'DRUGBANK', 'PUBCHEM', 'CHEBI', 'CHEMBL','DRUG.INTERACTION', 'INCHI', 'INCHIKEY',  'PUBCHEM.COMPOUND', 'KEGG.COMPOUND', 'KEGG.DRUG' , 'PHAROS.DRUG', 'CTD' ]
+
+'@translator-registry' :
+  skip_list:
+    - .*diseaseontologyapi.*
+
+# Defines transitions from one vocabulary domain to another including a predicate.
+
+'@operators':
+  anatomical_entity:
+    cell:
+       - link : anatomy_to_cell_type
+         op   : uberongraph.get_cell_by_anatomy_graph
+    gene:
+      - link : anatomy_to_gene
+        op   : hetio.anatomy_to_gene
+    phenotypic_feature:
+       - link : anatomy_to_phenotype
+         op   : uberongraph.get_phenotype_by_anatomy_graph
+  cell:
+    anatomical_entity:
+      - link : cell_type_to_anatomy
+        op   : uberongraph.get_anatomy_by_cell_graph
+    biological_process_or_activity:
+       - link : bio_process_cell_type
+         op   : quickgo.cell_to_go_term_annotation_extensions
+  biological_process_or_activity:
+    gene:
+      - link : bio_process_gene
+        op   : quickgo.go_term_to_gene_annotation
+    cell:
+      - link : bio_process_cell_type
+        op   : quickgo.go_term_to_cell_xontology_relationships
+      - link : bio_process_cell_type
+        op   : quickgo.go_term_to_cell_annotation_extensions
+  chemical_substance:
+    gene:
+      - link  : chemical_targets_gene
+        op    : chembio.graph_pubchem_to_ncbigene
+      - link  : drug_to_gene
+        op    : ctd.drug_to_gene
+    disease_or_phenotypic_feature:
+      - link  : adverse_events
+        op    : mychem.get_adverse_events
+      - link  : drugcentral
+        op    : mychem.get_drugcentral
+  disease_or_phenotypic_feature:
+    chemical_substance:
+      - link  : exposures
+        op    : ctd.disease_to_exposure
+      - link  : disease_to_chemical
+        op    : ctd.disease_to_chemical
+  disease:
+    phenotypic_feature:
+      - link  : disease_to_phenotype
+        op    : biolink.disease_get_phenotype
+      - link  : disease_to_phenotype
+        op    : hetio.disease_to_phenotype
+    gene:
+      - link  : disease_to_gene
+        op    : pharos.disease_get_gene
+  drug:
+    gene:
+      - link  : drug_to_gene
+        op    : pharos.drug_get_gene
+  gene:
+    anatomical_entity:
+      - link  : gene_to_anatomy
+        op    : hetio.gene_to_anatomy
+    #cellular_component:
+    #  - link  : gene_to_cellular_component
+    #    op    : hetio.gene_to_cellular_component
+    disease:
+      - link  : gene_to_disease
+        op    : biolink.gene_get_disease
+      - link  : gene_to_disease
+        op    : hetio.gene_to_disease
+    chemical_substance:
+      - link  : gene_to_drug
+        op    : ctd.gene_to_drug
+      - link  : gene_get_drug
+        op    : pharos.gene_get_drug
+    pathway:
+      - link  : gene_to_pathway
+        op    : biolink.gene_get_pathways
+      - link  : gene_to_pathway
+        op    : chembio.graph_get_pathways_by_gene
+    biological_process_or_activity:
+      - link  : biological_process_or_activity
+        op    : biolink.gene_get_process_or_function
+  pathway:
+    gene:
+      - link  : pathway_to_gene
+        op    : biolink.pathway_get_gene
+  phenotypic_feature:
+    anatomical_entity:
+      - link  : phenotype_to_anatomy
+        op    : uberongraph.get_anatomy_by_phenotype_graph
+
+'@type_checks':
+  genetic_condition: mondo.is_genetic_disease
+  molecular_activity: go.is_molecular_function
+  biological_process: go.is_biological_process
+  cell: typecheck.is_cell
+  disease: typecheck.is_disease
+  phenotypic_feature: typecheck.is_phenotypic_feature
