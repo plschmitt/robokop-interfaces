@@ -15,21 +15,29 @@ Blue nodes are semantic types from the [biolink-model](https://biolink.github.io
 $ <neo4j-install-dir>/bin/neo4j start
 ```
 ### Cache
-[Download](http://download.redis.io/releases/redis-4.0.8.tar.gz), install, and start Redis 4.0.8
+[Download](http://download.redis.io/releases/redis-4.0.8.tar.gz), install, and start Redis 4.0.10
 ```
-<redis-install-dir>/src/redis-server
+- install using homebrew (mac OS): '$brew install redis'
+OR install manually: <redis-install-dir>/src/redis-server
+- to start redis and set it so that it will run at login: '$brew services start redis'
+- check to see if redis server is running: '$redis-cli ping' --> response = 'PONG' if working
+
 ```
 ### App
 Clone the repository.
 ```
 $ git clone <repo>
-$ cd repo/greent
+$ cd repo
 $ pip install -r requirements.txt
+  NOTE, if you receive this message: "Command "python setup.py egg_info" failed with error code 1 in /private/var/<and so on> ...
+  do the following: 'brew install postgresql', then re-try '$ pip install -r requirements.txt'
 ```
+
 Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined services. It configures all of these according to the biolink-model.
 ```
-$ PYTHONPATH=$PWD/.. rosetta.py --delete-type-graph --initialize-type-graph --debug
+$ PYTHONPATH=$PWD python rosetta.py --delete-type-graph --initialize-type-graph --debug
 ```
+
 Via the Neo4J interface at http://localhost:7474/browser/ query the entire type graph:
 
 ```
