@@ -7,31 +7,72 @@ Rosetta coordinates semantically annotated data sources into a metadata graph. T
 
 Blue nodes are semantic types from the [biolink-model](https://biolink.github.io/biolink-model/)
 
-## Installation
+### Installation
+
+### System Preparation (macOS)
+
+Install Homebrew 'the missing package manager for macOS': 
+```
+$ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+neo4j requires a running JVM, version >= 1.8:
+```
+$ brew cask install java
+```
+then, since Neo4J startup script will look for 'JAVA_HOME', so set the 'JAVA_HOME' variable in your '.bash_profile' file with:
+```
+$ export JAVA_HOME=$(/usr/libexec/java_home)
+```
+
+Rosetta dependencies will also require the 'postgresql' package:
+```
+$ brew install postgresql
+```
 
 ### Graph Database
-[Download](https://neo4j.com/download/), install, and start Neo4J 3.2.6.
+[Download](https://neo4j.com/download/), install, and start Neo4J Enterprise >= 3.2.6. (Requires JVM >= 1.8, install)
 ```
 $ <neo4j-install-dir>/bin/neo4j start
 ```
 ### Cache
 [Download](http://download.redis.io/releases/redis-4.0.8.tar.gz), install, and start Redis 4.0.10
-```
-- install using homebrew (mac OS): '$brew install redis'
-OR install manually: <redis-install-dir>/src/redis-server
-- to start redis and set it so that it will run at login: '$brew services start redis'
-- check to see if redis server is running: '$redis-cli ping' --> response = 'PONG' if working
 
+using Homebrew on macOS:
 ```
-### App
+'$brew install redis'
+```
+OR download and then install manually: 
+```
+<redis-install-dir>/src/redis-server
+```
+- to start redis and set it so that it will run at login: 
+```
+$brew services start redis'
+```
+- check to see if redis server is running: 
+```
+$redis-cli ping'
+```
+--> response = 'PONG' if working
+
+### Rosetta Preparation
 Clone the repository.
 ```
 $ git clone <repo>
-$ cd repo
-$ pip install -r requirements.txt
-  NOTE, if you receive this message: "Command "python setup.py egg_info" failed with error code 1 in /private/var/<and so on> ...
-  do the following: 'brew install postgresql', then re-try '$ pip install -r requirements.txt'
-```
+$ cd repo/
+$ pip install -r rosetta_requirements.txt
+  ```
+  NOTE, if you receive this message: "Command "python setup.py egg_info" failed with error code 1 in /private/var/...  then do the following:
+  
+  ```
+  $ brew install postgresql
+  ```
+  then re-try: 
+  
+  $ pip install -r requirements.txt'
+
+### Initialize Rosetta
 
 Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined services. It configures all of these according to the biolink-model.
 ```
