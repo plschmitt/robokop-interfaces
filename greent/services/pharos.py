@@ -14,8 +14,8 @@ from greent.util import Munge
 from greent.util import Text
 from greent.service import Service
 from greent.util import LoggingUtil
-from greent.async import AsyncUtil
-from greent.async import Operation
+from greent.async_util import AsyncUtil
+from greent.async_util import Operation
 from greent.graph_components import KEdge, KNode, LabeledID
 from greent import node_types
 from simplejson.scanner import JSONDecodeError

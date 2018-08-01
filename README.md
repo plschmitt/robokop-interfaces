@@ -11,7 +11,7 @@ Blue nodes are semantic types from the [biolink-model](https://biolink.github.io
 
 ### System Preparation (macOS)
 
-Install Homebrew 'the missing package manager for macOS': 
+(optional) Install Homebrew 'the missing package manager for macOS': 
 ```
 $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
