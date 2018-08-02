@@ -52,16 +52,15 @@ OR download (http://download.redis.io/releases) and then install manually:
 <redis-install-dir>/src/redis-server
 ```
 
-- to start redis and set it so that it will run at login: 
+- to start redis immediately and set it so that it will run at login: 
 ```
 $brew services start redis'
 ```
 
-- check to see if redis server is running: 
+- check to see if redis server is running, response = 'PONG' if running: 
 ```
 $redis-cli ping'
 ```
---> response = 'PONG' if working
 
 # Rosetta Preparation
 - Clone the repository:
@@ -81,7 +80,8 @@ $ pip install -r rosetta_requirements.txt
 
 # Initialize Rosetta
 
-- Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined      services. It configures all of these according to the biolink-model.
+- Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined services. It configures all of these according to the biolink-model.
+
 ```
 $ PYTHONPATH=$PWD python greent/rosetta.py --delete-type-graph --initialize-type-graph --debug
 ```
