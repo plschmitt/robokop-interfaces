@@ -1,4 +1,4 @@
-### Rosetta Introduction
+# Rosetta Introduction
 
 - Rosetta is the knowledge map and service invocation tier of the Gamma Reasoner.
 
@@ -9,9 +9,9 @@
 Blue nodes are semantic types from the [biolink-model](https://biolink.github.io/biolink-model/)
 
 
-### General Installation
+# General Installation
 
-# System Preparation (macOS)
+## System Preparation (macOS)
 
 - (optional, macOS, recommended) Install Homebrew 'the missing package manager for macOS': 
 ```
