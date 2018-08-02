@@ -11,7 +11,7 @@ Blue nodes are semantic types from the [biolink-model](https://biolink.github.io
 
 # General Installation
 
-## System Preparation (macOS)
+### System Preparation (macOS)
 
 - (optional, macOS, recommended) Install Homebrew 'the missing package manager for macOS': 
 ```
@@ -33,7 +33,7 @@ $ echo export "JAVA_HOME=$(/usr/libexec/java_home)" >> ~/.bash_profile
 $ brew install postgresql
 ```
 
-# Neo4J (Graph Database) Setup
+### Neo4J (Graph Database) Setup
 
 - [Download](https://neo4j.com/download/) and install Neo4J Enterprise >= 3.2.6
 
@@ -42,10 +42,11 @@ $ brew install postgresql
 $ <neo4j-install-dir>/bin/neo4j start
 ```
 
-# Redis (Cache) Setup
+### Redis (Cache) Setup
+
 using Homebrew...
 ```
-'$brew install redis'
+$brew install redis
 ```
 OR download (http://download.redis.io/releases) and then install manually: 
 ```
@@ -54,31 +55,32 @@ OR download (http://download.redis.io/releases) and then install manually:
 
 - to start redis immediately and set it so that it will run at login: 
 ```
-$brew services start redis'
+$brew services start redis
 ```
 
 - check to see if redis server is running, response = 'PONG' if running: 
 ```
-$redis-cli ping'
+$redis-cli ping
 ```
 
-# Rosetta Preparation
+### Rosetta Preparation
+
 - Clone the repository:
 ```
 $ git clone <repo>
 $ cd <repo>
 $ pip install -r rosetta_requirements.txt
   ```
-  NOTE, if you receive this message: "Command "python setup.py egg_info" failed with error code 1 in /private/var/...  then do the following:
-   ```
-  $ brew install postgresql
+NOTE, if you receive this message: "Command "python setup.py egg_info" failed with error code 1 in /private/var/...  then do the following:
   ```
-  then re-try: 
-  ```
-  $ pip install -r rosetta_requirements.txt'
-  ```
+$ brew install postgresql
+```
+then re-try: 
+```
+$ pip install -r rosetta_requirements.txt
+```
 
-# Initialize Rosetta
+### Initialize Rosetta
 
 - Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined services. It configures all of these according to the biolink-model.
 
@@ -98,7 +100,7 @@ MATCH (n:named_thing)-[a]->(d:disease)-[b]->(g:gene) RETURN *
 
 In the returned graph, nodes are biolink-model concepts and edges contain attributes indicating the service to invoke. 
 
-## Web API
+# Web API
 
 The web API presents two endpoints:
 
@@ -158,17 +160,18 @@ To delete specific keys or patterns of keys from the cache:
 $ ~/app/redis-4.0.8/src/redis-cli --raw keys '*' | xargs ~/app/redis-4.0.8/src/redis-cli --raw del
 ```
 
-## Adding Edges
+# Adding Edges
 
 To add a data source to the knowledge map:
 
-#### Build a Service
+## Build a Service
+
 1. Reuse or develop a smartAPI interface to your data. 
 2. Publish a public network endpoint to the API if none exists.
 3. Register your smartAPI at the [Translator Registry](https://github.com/NCATS-Tangerine/translator-api-registry).
 4. For now, build a Python stub to your service. Soon, we hope to derive this information from the registry to invoke  services programmatically. For an example stub, see the [CTD service](https://github.com/NCATS-Gamma/robokop-interfaces/blob/master/greent/services/ctd.py). This is a stub for this [smartAPI endpoint](https://ctdapi.renci.org/apidocs/#/default).
 
-#### Configure Service Endpoint
+## Configure Service Endpoint
 1. Add your service endpoint URL to the configuration files following the CTD pattern.
    * Add to [greent.conf](https://github.com/NCATS-Gamma/robokop-interfaces/blob/master/greent/greent.conf) used for local development.
    * And [greent-dev.conf](https://github.com/NCATS-Gamma/robokop-interfaces/blob/master/greent/greent-dev.conf) used in the continuous integration environment.
@@ -177,7 +180,7 @@ To add a data source to the knowledge map:
 Instantiate your service, following the lazy loading pattern, in [core.py](https://github.com/NCATS-Gamma/robokop-interfaces/blob/master/greent/core.py)
 
 
-#### Edit the Configuration
+## Edit the Configuration
 This [YAML file](https://github.com/NCATS-Gamma/robokop-interfaces/blob/master/greent/rosetta.yml) links types in the biolink-model. Each link includes a predicate and the name of an operation.
 Operations are named:
 ```
@@ -189,7 +192,7 @@ where <objectName> is a member of core.py, the central service manager.
 2. Find the [biolink-model element](https://github.com/NCATS-Gamma/robokop-interfaces/blob/master/greent/conf/biolink-model.yaml) for the source type to your service.
 3. Follow the pattern in the configuration to enter your predicate (link) and operator (op)
 
-#### Rebuild the Knowledge Map
+## Rebuild the Knowledge Map
 ```
 $ PYTHONPATH=$PWD/.. rosetta.py --delete-type-graph --initialize-type-graph --debug
 ```
