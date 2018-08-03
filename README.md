@@ -44,11 +44,11 @@ $ <neo4j-install-dir>/bin/neo4j start
 
 ### Redis (Cache) Setup
 
-using Homebrew...
+- using Homebrew...
 ```
 $brew install redis
 ```
-OR download (http://download.redis.io/releases) and then install manually: 
+- OR download (http://download.redis.io/releases) and then install manually: 
 ```
 <redis-install-dir>/src/redis-server
 ```
@@ -75,9 +75,29 @@ NOTE, if you receive this message: "Command "python setup.py egg_info" failed wi
   ```
 $ brew install postgresql
 ```
-then re-try: 
+- then re-try: 
 ```
 $ pip install -r rosetta_requirements.txt
+```
+
+### setting variables
+
+- in <repo>/shared/robokop.env, ensure that NEO4J_PASSWORD is correct. You can change 
+the local neo4j server password:
+```
+$ <neo4j-enterprise-dir>/bin/neo4j-admin set-initial-password new_password_here
+```
+- the above command may return an error stating:
+```
+initial password was not set because live Neo4j-users were detected
+```
+- If this is the case, use the command below and then attempt to set-initial-password again:
+```
+$ rm <neo4j-enterprise-dir>/data/dbms/auth
+```
+- With the 'robokop.env' value NEO4J_PASSWORD = new_password_here saved, run the following which will call 'robokop.env' to set environmental variables:
+```
+$ source <robokop-interfaces-dir>/deploy/setenv.sh
 ```
 
 ### Initialize Rosetta
@@ -145,7 +165,7 @@ knowledge_graph = rosetta.construct_knowledge_graph(**{
       })
 ```
 
-## Caching
+# Caching
 
 We cache in Redis. Objects are serialized using Python's pickle scheme. 
 

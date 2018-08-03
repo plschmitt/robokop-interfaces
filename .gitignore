@@ -13,3 +13,4 @@ q2-drugandcondition-list.txt
 .vscode
 builder/cache
 .DS_Store
+shared/robokop.env
