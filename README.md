@@ -99,7 +99,7 @@ $ rm <neo4j-enterprise-dir>/data/dbms/auth
 ```
 $ source <robokop-interfaces-dir>/deploy/setenv.sh
 ```
-
+red
 ### Initialize Rosetta
 
 - Initialize the type graph. This imports the graph of Translator services, overlays local service configurations, and imports locally defined services. It configures all of these according to the biolink-model.
