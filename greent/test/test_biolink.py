@@ -81,3 +81,53 @@ def test_pathways(biolink):
         gene_ids = [ pk.id for pe,pk in presults ]
         #TODO: This doesn't work because we're not handling paging correctly
         #assert gene_id in gene_ids
+
+def test_disease_get_pathway(biolink)
+    asthma = KNode('DOID:2841', node_types.DISEASE)
+    results = biolink.disease_get_pathway(asthma)
+    assert len(results) > 90 and len(results) < 110
+
+def test_disease_get_phenotype(biolink)
+    asthma = KNode('DOID:2841', node_types.DISEASE)
+    results = biolink.disease_get_phenotype(asthma)
+    assert len(results) > 90 and len(results) < 110
+
+def test_disease_get_drug(biolink)
+    asthma = KNode('DOID:2841', node_types.DISEASE)
+    results = biolink.disease_get_drug(asthma)
+    assert len(results) > 90 and len(results) < 110
+
+def test_gene_get_anatomy(biolink)
+    KIT_protein = KNode('UniProtKB:P10721', type=node_types.GENE)
+    results = biolink.gene_get_anatomy(KIT_protein)
+    for ke, kn in results:
+        assert kn.type == node_types.ANATOMY
+        assert Text.get_curie(kn.id) == "GO"
+
+def test_gene_get_function(biolink)
+    KIT_protein = KNode('UniProtKB:P10721', type=node_types.GENE)
+    results = biolink.gene_get_function(KIT_protein)
+    for ke, kn in results:
+        assert kn.type == node_types.FUNCTION
+        assert Text.get_curie(kn.id) == "GO"
+
+def test_gene_get_genetic_condition(biolink)
+    KIT_protein = KNode('UniProtKB:P10721', type=node_types.GENE)
+    results = biolink.gene_get_genetic_condition(KIT_protein)
+    for ke, kn in results:
+        assert kn.type == node_types.GENETIC_CONDITION
+        assert Text.get_curie(kn.id) == "GO"
+
+def test_gene_get_pathway(biolink)
+    KIT_protein = KNode('UniProtKB:P10721', type=node_types.GENE)
+    results = biolink.gene_get_pathway(KIT_protein)
+    for ke, kn in results:
+        assert kn.type == node_types.PATHWAY
+        assert Text.get_curie(kn.id) == "GO"
+
+def test_gene_get_phenotype(biolink)
+    KIT_protein = KNode('UniProtKB:P10721', type=node_types.GENE)
+    results = biolink.gene_get_phenotype(KIT_protein)
+    for ke, kn in results:
+        assert kn.type == node_types.PHENOTYPE
+        assert Text.get_curie(kn.id) == "GO"
