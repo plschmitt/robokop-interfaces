@@ -138,3 +138,68 @@ class Biolink(Service):
         #response = requests.get(url).json()
         response = self.query(url)
         return self.process_associations(response, 'pathway_get_genes', node_types.GENE, url, pathway.id, pathway, reverse=True)
+
+    def anatomy_get_gene(self, anatomy):
+        url = '{0}/bioentity/anatomy/{1}/genes'.format(self.url, anatomy.id)
+        response = self.query(url)
+        return self.process_associations(response, 'anatomy_get_gene', node_types.GENE, anatomy.id, url, anatomy)
+        
+    def disease_get_pathway(self, disease):
+        url = '{0}/bioentity/disease/{1}/pathways'.format(self.url, disease.id)
+        response = self.query(url)
+        return self.process_associations(response, 'disease_get_pathway', node_types.PATHWAY, disease.id, url, disease)
+        
+    def disease_get_phenotype(self, disease):
+        url = '{0}/bioentity/disease/{1}/phenotypes'.format(self.url, disease.id)
+        response = self.query(url)
+        return self.process_associations(response, 'disease_get_phenotype', node_types.PHENOTYPE, disease.id, url, disease)
+        
+    def disease_get_drug(self, disease):
+        url = '{0}/bioentity/disease/{1}/treatment'.format(self.url, disease.id)
+        response = self.query(url)
+        return self.process_associations(response, 'disease_get_drug', node_types.DRUG, disease.id, url, disease)
+        
+    def gene_get_anatomy(self, gene):
+        url = '{0}/bioentity/gene/{1}/anatomy'.format(self.url, gene.id)
+        response = self.query(url)
+        return self.process_associations(response, 'gene_get_anatomy', node_types.ANATOMY, gene.id, url, gene)
+        
+    def gene_get_function(self, gene):
+        url = '{0}/bioentity/disease/{1}/function'.format(self.url, gene.id)
+        response = self.query(url)
+        return self.process_associations(response, 'gene_get_function', node_types.FUNCTION, gene.id, url, gene)
+        
+    def gene_get_genetic_condition(self, gene):
+        url = '{0}/bioentity/gene/{1}/genotypes'.format(self.url, gene.id)
+        response = self.query(url)
+        return self.process_associations(response, 'gene_get_genetic_condition', node_types.GENETIC_CONDITION, gene.id, url, gene)
+        
+    def gene_get_pathway(self, gene):
+        url = '{0}/bioentity/gene/{1}/pathways'.format(self.url, gene.id)
+        response = self.query(url)
+        return self.process_associations(response, 'gene_get_pathway', node_types.PATHWAY, gene.id, url, gene)
+        
+    def gene_get_phenotype(self, gene):
+        url = '{0}/bioentity/gene/{1}/phenotypes'.format(self.url, gene.id)
+        response = self.query(url)
+        return self.process_associations(response, 'gene_get_phenotype', node_types.PHENOTYPE, gene.id, url, gene)
+        
+    def pathway_get_gene(self, pathway):
+        url = '{0}/bioentity/pathway/{1}/genes'.format(self.url, pathway.id)
+        response = self.query(url)
+        return self.process_associations(response, 'pathway_get_gene', node_types.GENE, pathway.id, url, pathway)
+        
+    def phenotype_get_anatomy(self, phenotype):
+        url = '{0}/bioentity/phenotype/{1}/anatomy'.format(self.url, phenotype.id)
+        response = self.query(url)
+        return self.process_associations(response, 'phenotype_get_anatomy', node_types.ANATOMY, phenotype.id, url, phenotype)
+        
+    def phenotype_get_disease(self, phenotype):
+        url = '{0}/bioentity/phenotype/{1}/diseases'.format(self.url, phenotype.id)
+        response = self.query(url)
+        return self.process_associations(response, 'phenotype_get_disease', node_types.DISEASE, phenotype.id, url, phenotype)
+        
+    def phenotype_get_gene(self, phenotype):
+        url = '{0}/bioentity/phenotype/{1}/genes'.format(self.url, phenotype.id)
+        response = self.query(url)
+        return self.process_associations(response, 'phenotype_get_gene', node_types.GENE, phenotype.id, url, phenotype)
